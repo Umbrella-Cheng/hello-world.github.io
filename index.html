@@ -134,11 +134,18 @@ function show(id) {
 function play(src, loop = false) {
     const audio = document.getElementById("audio");
 
-    if (audio.src.includes(src)) return;
+    if (audio.src.includes(src)) {
+        audio.loop = loop;
+        if (audio.paused) {
+            audio.play().catch(err => console.log(err));
+        }
+        return;
+    }
 
     audio.pause();
     audio.src = src;
     audio.loop = loop;
+    audio.currentTime = 0;
 
     audio.play().catch(err => console.log(err));
 }
