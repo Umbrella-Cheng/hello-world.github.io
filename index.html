@@ -71,7 +71,7 @@ small {
 <div class="screen active" id="start">
     <h1>泥头车调度中心</h1>
     <p>欢迎使用异世界转生系统</p>
-    <button onclick="checkIOS()">开始检测</button>
+   <button onclick="startGame()">开始检测</button>
 </div>
 
 <!-- iOS失败 -->
@@ -123,6 +123,26 @@ small {
 </div>
 
 <script>
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    const audio = document.getElementById("audio");
+
+    audio.play()
+        .then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+            audioUnlocked = true;
+        })
+        .catch(err => console.log(err));
+}
+function startGame() {
+    unlockAudio();
+    checkIOS();
+}
+    
 function show(id) {
     document.querySelectorAll('.screen')
         .forEach(screen => screen.classList.remove('active'));
@@ -211,10 +231,10 @@ function finalReveal() {
         duration: 500
     });
 }
-
+    
 </script>
 
-<audio id="audio"></audio>
+<audio id="audio" preload="auto"></audio>
 
 </body>
 </html>
