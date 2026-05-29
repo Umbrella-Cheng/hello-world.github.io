@@ -130,14 +130,20 @@ function unlockAudio() {
 
     const audio = document.getElementById("audio");
 
+    audio.muted = true;
+    audio.src = "bgm.mp3";
+
     audio.play()
         .then(() => {
             audio.pause();
             audio.currentTime = 0;
+            audio.muted = false;
+            audio.src = "";
             audioUnlocked = true;
         })
         .catch(err => console.log(err));
 }
+    
 function startGame() {
     unlockAudio();
     checkIOS();
