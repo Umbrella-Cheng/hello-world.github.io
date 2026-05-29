@@ -125,7 +125,7 @@ small {
 <script>
 let audioUnlocked = false;
 
-function unlockAudio() {
+async function unlockAudio() {
     if (audioUnlocked) return;
 
     const audio = document.getElementById("audio");
@@ -133,19 +133,20 @@ function unlockAudio() {
     audio.muted = true;
     audio.src = "bgm.mp3";
 
-    audio.play()
-        .then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-            audio.muted = false;
-            audio.src = "";
-            audioUnlocked = true;
-        })
-        .catch(err => console.log(err));
+    try {
+        await audio.play();
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = false;
+        audio.src = "";
+        audioUnlocked = true;
+    } catch (err) {
+        console.log(err);
+    }
 }
     
-function startGame() {
-    unlockAudio();
+async function startGame() {
+    await unlockAudio();
     checkIOS();
 }
     
