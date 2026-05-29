@@ -121,70 +121,51 @@ small {
     <p>泥头车司机疲劳驾驶</p>
     <small>您已二次死亡</small>
 </div>
-
+<audio id="audio" preload="auto"></audio>
 <script>
 let audioUnlocked = false;
+const audio = document.getElementById("audio");
+
+function show(id) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+}
 
 async function unlockAudio() {
     if (audioUnlocked) return;
 
-    const audio = document.getElementById("audio");
-
-    audio.muted = true;
-    audio.src = "bgm.mp3";
-
     try {
+        audio.src = "bgm.mp3";
+        audio.muted = true;
+
         await audio.play();
+
         audio.pause();
         audio.currentTime = 0;
         audio.muted = false;
-        audio.src = "";
+
         audioUnlocked = true;
     } catch (err) {
-        console.log(err);
+        console.log("解锁失败:", err);
     }
 }
-    
+
+function play(src, loop = false) {
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = src;
+    audio.loop = loop;
+
+    audio.play().catch(err => console.log("播放失败:", err));
+}
+
 async function startGame() {
     await unlockAudio();
     checkIOS();
 }
-    
-function show(id) {
-    document.querySelectorAll('.screen')
-        .forEach(screen => screen.classList.remove('active'));
 
-    document.getElementById(id)
-        .classList.add('active');
-}
-
-function play(src, loop = false) {
-    const audio = document.getElementById("audio");
-
-    // 同一首歌
-    if (audio.src.includes(src)) {
-        audio.loop = loop;
-
-        if (audio.paused || audio.ended) {
-            audio.play().catch(err => console.log(err));
-        }
-        return;
-    }
-
-    // 新歌
-    audio.pause();
-    audio.currentTime = 0;
-    audio.src = src;
-
-    // 等加载完成再播
-    audio.onloadeddata = () => {
-        audio.loop = loop;
-        audio.play().catch(err => console.log(err));
-    };
-}
-// 第一关：iOS检测
-
-// 第一关：iOS检测
 function checkIOS() {
     play("bgm.mp3", true);
 
@@ -198,7 +179,6 @@ function checkIOS() {
     }
 }
 
-// 第二关：深色模式
 function checkDark() {
     if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
         play("laugh.mp3");
@@ -209,7 +189,6 @@ function checkDark() {
     }
 }
 
-// 第三关：时间检测
 function checkTime() {
     const hour = (new Date().getUTCHours() + 8) % 24;
 
@@ -222,10 +201,8 @@ function checkTime() {
     }
 }
 
-// 最终创人
 function finalReveal() {
     play("crash.mp3");
-
     show('ending');
 
     document.body.animate([
@@ -238,10 +215,7 @@ function finalReveal() {
         duration: 500
     });
 }
-    
 </script>
-
-<audio id="audio" preload="auto"></audio>
 
 </body>
 </html>
