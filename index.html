@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泥头车来喽~</title>
+
+<style>
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    text-align: center;
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+    padding: 30px;
+}
+
+.active {
+    display: flex;
+}
+
+button {
+    padding: 12px 24px;
+    background: #111;
+    color: white;
+    border: 1px solid #555;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #222;
+}
+
+small {
+    opacity: 0.7;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 第一幕 -->
+<div class="screen active" id="start">
+    <h1>泥头车调度中心</h1>
+    <p>欢迎使用异世界转生系统</p>
+    <button onclick="checkIOS()">开始检测</button>
+</div>
+
+<!-- iOS失败 -->
+<div class="screen" id="iosFail">
+    <h1>❌ 检测失败</h1>
+    <p>啊，是六耳猕猴来了</p>
+    <small>所谓有求而不得~</small>
+</div>
+
+<!-- 第二幕 -->
+<div class="screen" id="darkCheck">
+    <h1>设备认证成功</h1>
+    <p>AUV，您吉祥</p>
+    <button onclick="checkDark()">继续</button>
+</div>
+
+<!-- 深色失败 -->
+<div class="screen" id="darkFail">
+    <h1>❌ 阳气过盛</h1>
+    <p>骇死我勒</p>
+</div>
+
+<!-- 第三幕 -->
+<div class="screen" id="timeCheck">
+    <h1>五点睡，六点起，阎王夸我好身体</h1>
+    <p>我看好你哦！</p>
+    <button onclick="checkTime()">杰哥不要~~</button>
+</div>
+
+<!-- 时间失败 -->
+<div class="screen" id="timeFail">
+    <h1>❌ 天机未开</h1>
+    <p>灵台方寸山，斜月三星洞</p>
+    <small>你猜你猜你猜</small>
+</div>
+
+<!-- 真结局 -->
+<div class="screen" id="success">
+    <h1>✅ 校验完成</h1>
+    <p>大运青睐于你</p>
+    <button onclick="finalReveal()">向帝皇献上忠诚吧！</button>
+</div>
+
+<!-- 最终反转 -->
+<div class="screen" id="ending">
+    <h1>☠️ 转生失败</h1>
+    <p>泥头车司机疲劳驾驶</p>
+    <small>您已二次死亡</small>
+</div>
+
+<script>
+function show(id) {
+    document.querySelectorAll('.screen')
+        .forEach(screen => screen.classList.remove('active'));
+
+    document.getElementById(id)
+        .classList.add('active');
+}
+
+function play(src, loop = false) {
+    const audio = document.getElementById("audio");
+    audio.pause();
+    audio.src = src;
+    audio.loop = loop;
+    audio.play();
+}
+
+// 第一关：iOS检测
+function checkIOS() {
+    play("bgm.mp3", true);
+
+    const ua = navigator.userAgent;
+
+    if (!/iPhone|iPad/.test(ua)) {
+        play("laugh.mp3");
+        show('iosFail');
+    } else {
+        show('darkCheck');
+    }
+}
+
+// 第二关：深色模式
+function checkDark() {
+    if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        play("laugh.mp3");
+        show('darkFail');
+    } else {
+        play("suspense.mp3", true);
+        show('timeCheck');
+    }
+}
+
+// 第三关：时间检测
+function checkTime() {
+    const hour = (new Date().getUTCHours() + 8) % 24;
+
+    if (hour >= 2 && hour < 3) {
+        play("victory.mp3", true);
+        show('success');
+    } else {
+        play("laugh.mp3");
+        show('timeFail');
+    }
+}
+
+// 最终创人
+function finalReveal() {
+    play("crash.mp3");
+
+    show('ending');
+
+    document.body.animate([
+        { transform: 'translateX(-12px)' },
+        { transform: 'translateX(12px)' },
+        { transform: 'translateX(-12px)' },
+        { transform: 'translateX(12px)' },
+        { transform: 'translateX(0)' }
+    ], {
+        duration: 500
+    });
+}
+
+<audio id="audio"></audio>
+
+</script>
+
+</body>
+</html>
