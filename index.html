@@ -134,22 +134,27 @@ function show(id) {
 function play(src, loop = false) {
     const audio = document.getElementById("audio");
 
+    // 同一首歌
     if (audio.src.includes(src)) {
         audio.loop = loop;
-        if (audio.paused) {
+
+        if (audio.paused || audio.ended) {
             audio.play().catch(err => console.log(err));
         }
         return;
     }
 
+    // 新歌
     audio.pause();
-    audio.src = src;
-    audio.loop = loop;
     audio.currentTime = 0;
+    audio.src = src;
 
-    audio.play().catch(err => console.log(err));
+    // 等加载完成再播
+    audio.onloadeddata = () => {
+        audio.loop = loop;
+        audio.play().catch(err => console.log(err));
+    };
 }
-
 // 第一关：iOS检测
 
 // 第一关：iOS检测
