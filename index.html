@@ -121,9 +121,13 @@ function play(src, loop = false) {
     audio.pause();
     audio.src = src;
     audio.loop = loop;
-audio.play().catch(err => {
-    console.log(err);
-});
+
+    audio.play().catch(err => {
+        console.log(err);
+    });
+}
+
+// 第一关：iOS检测
 
 // 第一关：iOS检测
 function checkIOS() {
@@ -178,7 +182,6 @@ function finalReveal() {
     ], {
         duration: 500
     });
-}
 }
 
 </script>
