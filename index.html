@@ -121,8 +121,9 @@ function play(src, loop = false) {
     audio.pause();
     audio.src = src;
     audio.loop = loop;
-    audio.play();
-}
+audio.play().catch(err => {
+    console.log(err);
+});
 
 // 第一关：iOS检测
 function checkIOS() {
