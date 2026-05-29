@@ -133,13 +133,14 @@ function show(id) {
 
 function play(src, loop = false) {
     const audio = document.getElementById("audio");
+
+    if (audio.src.includes(src)) return;
+
     audio.pause();
     audio.src = src;
     audio.loop = loop;
 
-    audio.play().catch(err => {
-        console.log(err);
-    });
+    audio.play().catch(err => console.log(err));
 }
 
 // 第一关：iOS检测
